@@ -9,10 +9,10 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
-  const { user, profile, isLoading, isInitialized } = useAuth();
+  const { user, profile, isInitialized } = useAuth();
   const location = useLocation();
 
-  if (!isInitialized || isLoading) {
+  if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -32,10 +32,10 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
 }
 
 export function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { user, isLoading, isInitialized } = useAuth();
+  const { user, isInitialized } = useAuth();
   const location = useLocation();
 
-  if (!isInitialized || isLoading) {
+  if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />

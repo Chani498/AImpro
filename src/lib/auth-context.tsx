@@ -127,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(newSession?.user ?? null);
 
       if (event === 'SIGNED_IN' && newSession?.user) {
+        setIsLoading(false);
         (async () => {
           const { profile: profileData, company: companyData } = await fetchUserData(
             newSession.user.id
@@ -134,7 +135,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (mounted) {
             setProfile(profileData);
             setCompany(companyData);
-            setIsLoading(false);
           }
         })();
       } else if (event === 'SIGNED_OUT') {
@@ -151,16 +151,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [fetchUserData]);
 
   const signIn = async (email: string, password: string) => {
-    setIsLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setIsLoading(false);
-    }
     return { error };
   };
 
   const signUp = async (email: string, password: string, firstName?: string, lastName?: string) => {
-    setIsLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -171,9 +166,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         },
       },
     });
-    if (error) {
-      setIsLoading(false);
-    }
     return { error, data };
   };
 
